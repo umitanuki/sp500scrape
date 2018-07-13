@@ -1,0 +1,7 @@
+__pycache__
+*.pyc
+*.swp
+.vscode
+.envrc
+
+data.py
