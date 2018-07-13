@@ -2,13 +2,14 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
+
 def parse(soup):
     tables = soup.select('table')
 
     current = []
     for row in tables[0].select('tbody')[0].select('tr')[1:]:
         current.append(row.select('td')[0].text.strip())
-    
+
     changes = {}
     last_date = None
     rowspan = 0
@@ -25,8 +26,8 @@ def parse(soup):
         removed = cells[3 if has_date else 2].text.strip()
         if date not in changes:
             changes[date] = {
-               'added': [],
-               'removed': [], 
+                'added': [],
+                'removed': [],
             }
         if added != '':
             changes[date]['added'].append(added)
@@ -37,7 +38,7 @@ def parse(soup):
 
     print(f'latest = {current}\n')
     print(f'changes = {changes}\n')
-    return current, changes    
+    return current, changes
     from IPython import embed
     embed()
 
@@ -55,11 +56,11 @@ def write_history(current, changes):
             slist = ','.join(sorted(list(symbols)))
             fp.write(f'{today},"{slist}"\n')
             date -= pd.Timedelta('1day')
-    
 
 
 def main():
-    content = requests.get('https://en.wikipedia.org/wiki/List_of_S&P_500_companies').content
+    content = requests.get(
+        'https://en.wikipedia.org/wiki/List_of_S&P_500_companies').content
     soup = BeautifulSoup(content, 'html.parser')
 
     current, changes = parse(soup)
