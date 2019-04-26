@@ -8,7 +8,7 @@ def parse(soup):
 
     current = []
     for row in tables[0].select('tbody')[0].select('tr')[1:]:
-        current.append(row.select('td')[1].text.strip())
+        current.append(row.select('td')[0].text.strip())
 
     changes = {}
     last_date = None
